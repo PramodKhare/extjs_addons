@@ -1,4 +1,3 @@
-// vim: ts=4:sw=4:nu:fdc=4:nospell
 /**
  * Ext.ux.form.LovCombo, List of Values Combo
  *
@@ -34,7 +33,6 @@ if('function' !== typeof RegExp.escape) {
 Ext.ns('Ext.ux.form');
  
 /**
- *
  * @class Ext.ux.form.LovCombo
  * @extends Ext.form.ComboBox
  */
@@ -61,15 +59,24 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 	// }}}
     // {{{
     ,initComponent:function() {
-        //Local variables
+		//Code Changes by Pramod starts here - on 4th Sept, 2013
+        
+		//Local variables starts here
 		var combo = this,
 			totalCount = 0,
 			id = this.getId() + '-toolbar-panel'; //toolbar panel's id
+		//Local variable declaration ends here
 		
 		// template with checkbox
 		if(!this.tpl) {
 			this.tpl = 
-				'<div id="' + id + '"></div>' //division for holding toolbar
+				//Modification to template starts here - 
+				//Modification - Inserted a static div tag in value-list template.
+				//We will insert a toolbar (which we will create next) before this div tag
+				//using DomHelper's insertBefore method
+				'<div id="' + id + '"></div>'
+				//Modification to template ends here
+				
 				+'<tpl for=".">'
 				+'<div class="x-combo-list-item">'
 				+'<img src="' + Ext.BLANK_IMAGE_URL + '" '
@@ -80,33 +87,43 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 				+'</tpl>'
 			;
 		}
-		
+		//Toolbar for value-list starts here.
+		//Future Modifications-there are many possibilities as per the requirement,
+		//so this is a main piece of code.
 		//Create a toolbar with select all, deselect all, filter textbox, etc.
 		var toolbar = new Ext.Toolbar({
 			height: 30,
 			items : [{
 				xtype : 'checkbox',
+				//creating unique id because we need handle of this checkbox later
 				id : id + 'selectAllChkBox',
 				style : 'padding:-1px 0px 0px 1px;',
 				boxLabel: 'Select All',
 				handler : function(chkBox, isChecked) {
+					//Clearing any filter criterion, and reseting its value
 					Ext.getCmp(id + 'filter-field').reset();
 					combo.store.clearFilter();
-					//As the button serves 2 different purposes
-					//Check first if button's name is "Select All" or "Deselect All"
-					//When "Select All" checkbox is clicked - select all records in combobox dropdown
-					//Deselect All - if text is deselect all.
-					//Once the selecting/deselected is done - change/toggle its text 
+					//As checkbox button serves 2 different purposes i.e. "Select All" or "Deselect All"
+					//First if button's label/text is either "Select All" or "Deselect All"
+					//When "Select All" and checkbox is clicked - selects all records in combobox dropdown list
+					//When "Deselect All" and checkbox deselected - deselects all records.
+					//Once the selection/deselection is done - toggle its text. 
+					
+					//Flag to check if select all checkbox is checked and 
+					//now we have to check/select all records/values.
 					var selectAll = (chkBox.boxLabel == "Select All")?true:false;
+					
 					if (selectAll) {
 						combo.selectAll();
 						totalCount = combo.getStore().getRange().length;
 						chkBox.boxLabel = "Deselect All";
 					} else {
+						//else condition means, not all of them are selected
 						combo.deselectAll();
 						totalCount = 0;
 						chkBox.boxLabel = "Select All";						
 					}
+					//Updating Checkbox's label.
 					if(chkBox.rendered){
 						chkBox.wrap.child('.x-form-cb-label').update(chkBox.boxLabel);
 					}
@@ -122,8 +139,8 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 					keyup : function(field, e) {
 						combo.store.clearFilter();
 						if (field.getValue()) {
-							combo.store.filter(combo.displayField,
-									field.getValue());
+							//filter records as per typed text, case-sensitive=false and any-match=true
+							combo.store.filter(combo.displayField, field.getValue(), true, false);
 						}
 					}
 				}
@@ -134,8 +151,7 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 				id : id + 'total-count'
 			}]
 		});
-		
-		//Now add this toolbar into first div container
+		//Toolbar creation ends here		
 		
         // call parent
         Ext.ux.form.LovCombo.superclass.initComponent.apply(this, arguments);
@@ -145,11 +161,15 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 			scope:this
 			,beforequery:this.onBeforeQuery
 			,blur:this.onRealBlur
+			
+			//Adding a default select handler for combo-box,
+			//to check if its checkbox's was selected or deselected...
 			,select: function (combo, record, index) {
 				//Find if its deselect or select by using this.checkField 
 				var isDeselect = (record.get(combo.checkField) == false)?true:false;
 				var chkBox = Ext.getCmp(id + 'selectAllChkBox');
-				if(isDeselect){
+				
+				if(isDeselect){	//this condition means a record was deselected, 
 					totalCount--; //decrement the total selected values count
 					//an item is deselected,
 					//When any item is deselected change the count and Total :x	Text and deselect top "Select All" checkbox
@@ -158,7 +178,7 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 					chkBox.boxLabel = "Select All";
 					chkBox.el.dom.checked = false;
 					chkBox.checked = false;
-				}else{
+				}else{	//this condition means a record was selected, 
 					totalCount++; //Increment the total selected values count
 					//an item is selected, 
 					//Check if totalCount is equals to total store records, then select "Select All" checkbox
@@ -170,35 +190,40 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 						chkBox.boxLabel = "Deselect All";
 					}
 				}
+				//updating "Select All"/"Deselect All" 's Checkbox text as per condition
 				if(chkBox.rendered){
 					chkBox.wrap.child('.x-form-cb-label').update(chkBox.boxLabel);
 				}
+				//setting proper text indication how many values were selected out of total
 				Ext.getDom( id + 'total-count').innerHTML = 'Selected : '+totalCount+'/'+combo.getStore().getRange().length; //Change Total : x innerHTML
             }
             ,expand: {
                 fn: function(converted) {
-					var dropdown = Ext.get(id).dom.parentElement;
+					//inserting above toolbar into combobox list at the top.
+					var dropdown = Ext.get(id).dom.parentElement; //getting a div tag handle which we have added to template above.
                     var container = Ext.DomHelper.insertBefore(dropdown, '<div id="'+id+'-container"></div>', true);
                     toolbar.render(container);
                 },
-                single: true
+                single: true //Will execute only once, when combo-box expands for the first time
             }
         });
-
+		
         // remove selection from input field
         this.onLoad = this.onLoad.createSequence(function() {
-				//to increase size of dropdown list by 30, to compensate for height of toolbar added.
+				//to increase size of dropdown list by 30, to compensate for height of toolbar added,
+				//otherwise last value in dropdown list will be gone.
 				if(this.el && this.hasFocus && this.store.getCount() > 0){
 					this.list.setHeight(this.list.getHeight()+30);
 					this.innerList.setHeight(this.innerList.getHeight()+30);
 				}
                 if(this.el) {
-                        var v = this.el.dom.value;
-                        this.el.dom.value = '';
-                        this.el.dom.value = v;
+					var v = this.el.dom.value;
+					this.el.dom.value = '';
+					this.el.dom.value = v;
                 }
         });
- 
+		//Pramod's modifications to LovCombo ends here. Happy Coding... 
+		
     } // e/o function initComponent
     // }}}
 	// {{{
@@ -376,8 +401,7 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 	// }}}
 
 }); // eo extend
- 
+
 // register xtype
 Ext.reg('lovcombo', Ext.ux.form.LovCombo); 
- 
 // eof
