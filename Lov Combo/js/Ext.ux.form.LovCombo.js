@@ -278,6 +278,18 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 
 		return c.join(this.separator);
 	} // eo function getCheckedValue
+	
+	// Code Modification by Pramod - 26th March 2014
+	// before blur function - overriden to remove call to 
+	// assertValue() function of superclass Ext.form.ComboBox
+	// because combobox by default can select only one record,
+	// here, in this Ext.ux.form.LovCombo, multiple records seletion is handled
+	// using checked field in the records
+    ,beforeBlur : function(){
+		//this.assertValue();
+    }
+	// Code Modification by Pramod - 26th March 2014 ends here
+		
 	// }}}
 	// {{{
 	/**
