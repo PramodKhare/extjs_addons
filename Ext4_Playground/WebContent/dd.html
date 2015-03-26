@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Sencha Fiddle - DnD Final</title>
+    <link rel="stylesheet" type="text/css" href="lib/extjs/resources/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/main.css"/>
+    <script type="text/javascript" src="lib/extjs/ext-all-debug-w-comments.js"></script>
+        <script type="text/javascript" src="app.js"></script>
+
+    </head>
+    <body>
+
+<style>
+#content{
+    width:80%;
+    height:400px;
+    padding:10px;
+    border:1px solid #000;
+}
+#tables{
+    float:left;
+    width:40%;
+    height:100%;
+    border:1px solid #AAA;
+     background-color:rgba(222, 222, 222, 1.0);
+}
+#mainRoom{
+    float:left;
+    width:55%;
+    height:100%;
+    margin-left:15px;
+    border:1px solid #AAA;
+     background-color:rgba(222, 222, 222, 1.0);
+}
+.table{
+    background-color:rgba(254, 108, 98, 1.0);
+    border-radius:2px;
+    border:1px solid gray;    
+    width:64px;
+    height:64px;
+    margin:10px;
+    color:#FFF;
+    cursor:pointer;
+    text-align:right;    
+    /*position:relative;
+    float:left;*/
+    display: inline-block;
+}
+.valid-zone{
+    background-color:rgba(157, 229, 86, 1.0) !important;
+}
+.selected{
+    opacity:0.5;
+}
+
+</style>
+
+<div id="content">   
+    <div id="tables"> 
+        <div class="table">1</div>
+        <div class="table">2</div>
+        <div class="table">3</div>
+        <div class="table">4</div>
+        
+        <div class="table">5</div>
+        <div class="table">6</div>
+        <div class="table">7</div>
+        <div class="table">8</div>
+        
+        <div class="table">9</div>
+        <div class="table">10</div>
+        <div class="table">11</div>
+        <div class="table">12</div>
+    </div>
+     <div id="mainRoom"></div>
+</div>
+
+    </body>
+</html>

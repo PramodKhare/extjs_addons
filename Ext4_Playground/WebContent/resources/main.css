@@ -1,0 +1,14 @@
+.chkCombo-default-icon {
+    width:16px;
+    height:16px;
+    float:left;
+    background-position: 0px 1px ! important;
+    background-repeat:no-repeat ! important;
+}
+
+.x-boundlist-item img.chkCombo {
+    background: transparent url(../lib/extjs/resources/themes/images/default/menu/unchecked.gif);
+}
+.x-boundlist-selected img.chkCombo{
+    background: transparent url(../lib/extjs/resources/themes/images/default/menu/checked.gif);
+}
