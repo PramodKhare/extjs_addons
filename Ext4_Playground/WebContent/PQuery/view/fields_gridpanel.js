@@ -4,10 +4,9 @@ var getFieldGridPanel = function() {
     return fieldGridPanel;
   }
   fieldGridPanel = Ext.create('Ext.grid.Panel', {
-        title : 'Fields List',
-        tooltip : 'List of Fields with Ids',
-        flex : 1,
+        flex : 1.4,
         stripeRows : true,
+        header : false,
         enableDragDrop : true,
         id : 'fieldsGridPanelId',
         autoExpandColumn : 'name',
@@ -25,13 +24,27 @@ var getFieldGridPanel = function() {
         selModel : new Ext.selection.RowModel({
               singleSelect : true
             }),
-        tools : [{
-              type : 'refresh',
-              tooltip : 'Reload Fields',
-              scope : this,
-              handler : function() {
-                Ext.getCmp('fieldsGridPanelId').getStore().load();
-              }
+        tbar : [{
+              xtype : 'radiogroup',
+              hideLabel : true,
+              items : [{
+                    boxLabel : 'Indian patents',
+                    name : 'patent-fields',
+                    inputValue : 1,
+                    width : 100,
+                    checked : true,
+                    handler : function() {
+                      Ext.getCmp('fieldsGridPanelId').getStore().load();
+                    }
+                  }, {
+                    boxLabel : 'World wide patents',
+                    name : 'patent-fields',
+                    inputValue : 2,
+                    width : 150,
+                    handler : function() {
+                      Ext.getCmp('fieldsGridPanelId').getStore().load();
+                    }
+                  }]
             }],
         viewConfig : {
           scrollOffset : 0,

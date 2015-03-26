@@ -283,7 +283,6 @@ var getSearchQueryEditFormPanel = function() {
   }
 
   searchQueryEditForm = Ext.create('Ext.form.Panel', {
-        title : 'Search Query',
         // url: 'save-form.php',
         layout : 'anchor',
         defaults : {

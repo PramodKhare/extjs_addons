@@ -4,7 +4,7 @@ var getQuerySearchHistoryGridPanel = function() {
     return historyGridPanel;
   }
   historyGridPanel = Ext.create('Ext.grid.Panel', {
-        title : 'History',
+        title : 'Query History',
         tooltip : 'History of current session queries',
         stripeRows : true,
         layout : 'fit',

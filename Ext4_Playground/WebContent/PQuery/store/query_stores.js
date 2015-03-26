@@ -10,7 +10,11 @@ Ext.create('Ext.data.Store', {
           type : 'json',
           root : 'items'
         }
-      }
+      },
+      sorters : [{
+            property : 'id',
+            direction : 'ASC'
+          }]
     });
 
 Ext.create('Ext.data.Store', {

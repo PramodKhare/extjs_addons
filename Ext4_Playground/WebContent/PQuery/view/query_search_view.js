@@ -7,33 +7,26 @@ var getQuerySearchTabPanel = function() {
   if (querySearchTabPanel != null) {
     return querySearchTabPanel;
   }
-  querySearchTabPanel = Ext.create('Ext.tab.Panel', {
-        xtype : 'tabpanel',
-        activeTab : 0,
-        id : 'querySearchTabPanelContainerId',
+  querySearchTabPanel = Ext.create('Ext.panel.Panel', {
+        id : 'querySearchPanelContainerId',
         border : false,
-        items : [{
-              title : 'Query Tab',
-              tooltip : 'Query Patent Database',
-              closable : false,
+        layout : {
+          type : 'hbox',
+          align : 'stretch'
+        },
+        autoScroll : true,
+        border : false,
+        items : [getFieldGridPanel(), {
+              xtype : 'panel',
+              header : false,
+              border : false,
+              id : 'vpanel-1',
               layout : {
-                type : 'hbox',
+                type : 'vbox',
                 align : 'stretch'
               },
-              autoScroll : true,
-              border : false,
-              items : [getFieldGridPanel(), {
-                    xtype : 'panel',
-                    header : false,
-                    border : false,
-                    id : 'vpanel-1',
-                    layout : {
-                      type : 'vbox',
-                      align : 'stretch'
-                    },
-                    flex : 5,
-                    items : [getSearchQueryEditFormPanel(), getQuerySearchHistoryGridPanel()]
-                  }]
+              flex : 5,
+              items : [getSearchQueryEditFormPanel(), getQuerySearchHistoryGridPanel()]
             }]
       });
 
